@@ -17,17 +17,9 @@ class WarningSysCog(commands.Cog):
         cluster = MongoClient("")#FILL IN DETAILS HERE
         db = cluster["discord"]
         collection = db["warningsys"]
-		
-        with open("counter.json") as f:
-            data = json.load(f)
+	count = warningsys.count_documents({})
 
-        number = int(data["counter"])
-        number += 1
-        data["counter"] = int(number)
-        with open("counter.json", 'w') as f:
-            json.dump(data, f)
-            
-        post = {"_id":f"{number}", "username": f"{user.name}", "reason":f"{reason}", "warner": f"{ctx.author.name}"}
+        post = {"_id": count + 1, "username": f"{user.name}", "reason":f"{reason}", "warner": f"{ctx.author.name}"}
 
         channel_em = discord.Embed(title = "__Warned__", description = f"{ctx.author.mention} warned {user.mention}",colour=0xD22063)
         channel_em.set_thumbnail(url = "https://images-ext-1.discordapp.net/external/OVwUO6DhoIc7Lcyfgp97l1jgmASpGt50KSW26J-MPnA/%3Fsize%3D128/https/cdn.discordapp.com/icons/819636321223442472/67da9cfec011b8c455097752e3f4e2b7.png")
